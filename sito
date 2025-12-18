@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hedge Fund - Trading Matematico Senza Segreti</title>
+    <meta name="description" content="Sistema completo per generare profitti dalle prop firm. Software proprietario, formazione completa, community attiva. 300+ clienti, 7000+ community.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --matrix-green: #00ff41;
+            --matrix-green-dark: #00cc33;
+            --matrix-green-glow: rgba(0, 255, 65, 0.5);
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border-color: #222222;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace !important; }
+
+        /* Glow Effects */
+        .glow-text { text-shadow: 0 0 10px var(--matrix-green-glow), 0 0 20px var(--matrix-green-glow); }
+        .glow-box { box-shadow: 0 0 30px rgba(0, 255, 65, 0.2); }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--matrix-green);
+            color: #000;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--matrix-green-dark);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--matrix-green);
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 4px;
+            border: 2px solid var(--matrix-green);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .card-highlighted {
+            border: 2px solid var(--matrix-green);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
+
+        /* Sections */
+        section { padding: 100px 0; }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        /* Stats */
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--matrix-green);
+            text-shadow: 0 0 10px var(--matrix-green-glow);
+        }
+
+        /* Navigation */
+        .nav-link {
+            color: #888;
+            transition: color 0.3s;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--matrix-green); }
+
+        /* Page System */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Blockquote */
+        blockquote {
+            border-left: 3px solid var(--matrix-green);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* Terminal style */
+        .terminal-line::before {
+            content: '> ';
+            color: var(--matrix-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-title { font-size: 1.875rem; }
+            .stat-value { font-size: 1.75rem; }
+            section { padding: 60px 0; }
+        }
+
+        /* Animations */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 65, 0.6); }
+        }
+
+        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- NAVBAR                                     -->
+    <!-- ========================================== -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold font-mono text-white" data-page="home">
+                HEDGE<span class="text-[#00ff41]">FUND</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#home" class="nav-link active" data-page="home">Home</a>
+                <a href="#chi-siamo" class="nav-link" data-page="chi-siamo">Chi Siamo</a>
+                <a href="#software" class="nav-link" data-page="software">Software</a>
+                <a href="#corsi" class="nav-link" data-page="corsi">Corsi</a>
+                <a href="#testimonial" class="nav-link" data-page="testimonial">Testimonial</a>
+                <a href="#contatti" class="nav-link" data-page="contatti">Contatti</a>
+                <a href="#pricing-section" class="btn-primary text-xs py-2 px-4">Inizia Ora</a>
+            </div>
+            <button class="md:hidden text-white" id="mobile-menu-btn">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden bg-black border-t border-gray-900" id="mobile-menu">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#home" class="block nav-link" data-page="home">Home</a>
+                <a href="#chi-siamo" class="block nav-link" data-page="chi-siamo">Chi Siamo</a>
+                <a href="#software" class="block nav-link" data-page="software">Software</a>
+                <a href="#corsi" class="block nav-link" data-page="corsi">Corsi</a>
+                <a href="#testimonial" class="block nav-link" data-page="testimonial">Testimonial</a>
+                <a href="#contatti" class="block nav-link" data-page="contatti">Contatti</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: HOME                                 -->
+    <!-- ========================================== -->
+    <div id="home" class="page active">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+            <!-- Background glow effect -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00ff41]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 bg-[#00ff41]/10 border border-[#00ff41]/30 rounded-full px-4 py-2 mb-8">
+                    <span class="w-2 h-2 bg-[#00ff41] rounded-full animate-pulse"></span>
+                    <span class="text-[#00ff41] text-sm font-mono">300+ Trader Attivi</span>
+                </div>
+
+                <!-- Headline -->
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    Trading Matematico<br>
+                    <span class="text-[#00ff41] glow-text">Senza Segreti</span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="text-xl md:text-2xl text-gray-400 mb-4 max-w-3xl mx-auto">
+                    Sistema completo per generare profitti dalle prop firm.
+                </p>
+                <p class="text-lg text-white mb-8 max-w-2xl mx-auto">
+                    <strong>Software proprietario, formazione completa, community attiva.</strong>
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                    <a href="#pricing-section" class="btn-primary pulse-glow">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                        Scopri i Pacchetti
+                    </a>
+                    <a href="#software" class="btn-secondary" data-page="software">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                        Come Funziona
+                    </a>
+                </div>
+
+                <!-- Trust Bar Stats -->
+                <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+                    <div class="text-center">
+                        <div class="stat-value">300+</div>
+                        <div class="text-gray-500 text-sm">Clienti Attivi</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-value">7K+</div>
+                        <div class="text-gray-500 text-sm">Community Telegram</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-value">5</div>
+                        <div class="text-gray-500 text-sm">White Label</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-value font-mono text-xl mt-1">DAILY</div>
+                        <div class="text-gray-500 text-sm">Live Trading</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PREVIEW SECTIONS -->
+        <section class="bg-[#0a0a0a]">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="section-title">Un <span class="text-[#00ff41]">Ecosistema</span> Completo</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Tutto quello che ti serve per iniziare e scalare. Niente fronzoli, solo strumenti che funzionano.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Software Preview -->
+                    <div class="card">
+                        <div class="w-14 h-14 bg-[#00ff41]/10 rounded-lg flex items-center justify-center mb-5">
+                            <i data-lucide="terminal" class="w-7 h-7 text-[#00ff41]"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Software Proprietario</h3>
+                        <p class="text-gray-500 mb-4">Esecuzione al millisecondo, account illimitati, calcolatore Excel per recovery amount. Tutto incluso.</p>
+                        <ul class="space-y-2 mb-5 text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Precisione al millisecondo</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Nessun limite di account</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Aggiornamenti gratuiti</li>
+                        </ul>
+                        <a href="#software" class="text-[#00ff41] text-sm hover:underline inline-flex items-center gap-1" data-page="software">
+                            Scopri il Software <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+
+                    <!-- Corsi Preview -->
+                    <div class="card">
+                        <div class="w-14 h-14 bg-[#00ff41]/10 rounded-lg flex items-center justify-center mb-5">
+                            <i data-lucide="graduation-cap" class="w-7 h-7 text-[#00ff41]"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Video Academy</h3>
+                        <p class="text-gray-500 mb-4">20+ ore di formazione strutturata. Dal primo click al primo payout, con coach privato che ti segue.</p>
+                        <ul class="space-y-2 mb-5 text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Corso completo step-by-step</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Coach privato 1:1</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Live trading quotidiane</li>
+                        </ul>
+                        <a href="#corsi" class="text-[#00ff41] text-sm hover:underline inline-flex items-center gap-1" data-page="corsi">
+                            Esplora i Corsi <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+
+                    <!-- Community Preview -->
+                    <div class="card">
+                        <div class="w-14 h-14 bg-[#00ff41]/10 rounded-lg flex items-center justify-center mb-5">
+                            <i data-lucide="users" class="w-7 h-7 text-[#00ff41]"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Community Attiva</h3>
+                        <p class="text-gray-500 mb-4">300+ persone che usano il sistema ogni giorno. Risultati condivisi, problemi risolti insieme.</p>
+                        <ul class="space-y-2 mb-5 text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Discord privato</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> 7.000+ membri Telegram</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Risultati verificabili</li>
+                        </ul>
+                        <a href="#contatti" class="text-[#00ff41] text-sm hover:underline inline-flex items-center gap-1" data-page="contatti">
+                            Unisciti alla Community <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING SECTION -->
+        <section id="pricing-section">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h2 class="section-title">Scegli il Tuo <span class="text-[#00ff41]">Pacchetto</span></h2>
+                <p class="section-subtitle">Inizia con Starter per testare. Scala a Pro quando sei pronto. Zero vincoli.</p>
+
+                <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+                    <!-- STARTER -->
+                    <div class="card text-left">
+                        <h3 class="text-lg font-semibold text-gray-400 mb-2">Starter</h3>
+                        <div class="mb-2">
+                            <span class="text-4xl font-bold font-mono">€199</span>
+                            <span class="text-gray-500">/mese</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-6">Perfetto per iniziare e testare il sistema</p>
+
+                        <ul class="space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>5 account prop firm</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Video academy base</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Accesso Discord community</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Setup call iniziale (30 min)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Supporto via ticket</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                                <span>Coach privato 1:1</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-gray-600">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                                <span>Calcolatore Excel avanzato</span>
+                            </li>
+                        </ul>
+
+                        <a href="#" class="btn-secondary w-full">Inizia con Starter</a>
+                        <p class="text-gray-600 text-xs mt-3 text-center">Ideale per chi vuole capire se fa per lui</p>
+                    </div>
+
+                    <!-- PRO (Highlighted) -->
+                    <div class="card card-highlighted text-left relative">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+                            <span class="bg-[#00ff41] text-black text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">🔥 Più Popolare</span>
+                        </div>
+
+                        <h3 class="text-lg font-semibold text-[#00ff41] mb-2">Pro</h3>
+                        <div class="mb-2">
+                            <span class="text-4xl font-bold font-mono text-[#00ff41]">€349</span>
+                            <span class="text-gray-500">/mese</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-6">Tutto quello che serve per risultati seri</p>
+
+                        <ul class="space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>15 account</strong> prop firm</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Video academy <strong>completa</strong> (20+ ore)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Accesso Discord community</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>Coach privato 1:1</strong> (2 call/mese)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>Calcolatore Excel</strong> proprietario</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>Priority support</strong> (risposta < 2h)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Webinar mensili esclusivi</span>
+                            </li>
+                        </ul>
+
+                        <a href="#" class="btn-primary w-full">Scegli Pro</a>
+                        <p class="text-gray-500 text-xs mt-3 text-center">Scelto dall'80% dei nostri clienti</p>
+                    </div>
+
+                    <!-- ELITE -->
+                    <div class="card text-left">
+                        <h3 class="text-lg font-semibold text-gray-400 mb-2">Elite</h3>
+                        <div class="mb-2">
+                            <span class="text-4xl font-bold font-mono">€549</span>
+                            <span class="text-gray-500">/mese</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-6">Per chi vuole scalare o fare white label</p>
+
+                        <ul class="space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Account <strong>ILLIMITATI</strong></span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Tutto di Pro, più:</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>White label option</strong> (il tuo brand)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span><strong>Revenue share</strong> program</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Partner dashboard dedicata</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Formazione trading avanzata</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                                <span>Canale Slack con founders</span>
+                            </li>
+                        </ul>
+
+                        <a href="#contatti" class="btn-secondary w-full" data-page="contatti">Contattaci</a>
+                        <p class="text-gray-600 text-xs mt-3 text-center">Ideale per chi vuole costruire un business</p>
+                    </div>
+                </div>
+
+                <!-- Guarantee -->
+                <div class="mt-12 p-6 border border-[#00ff41]/30 rounded-lg max-w-2xl mx-auto bg-[#00ff41]/5">
+                    <div class="flex items-center justify-center gap-3 mb-2">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-[#00ff41]"></i>
+                        <span class="font-bold text-lg">7 Giorni Gratis in Community</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Non chiediamo la carta di credito. Entra nel Discord, guarda le live, parla con i membri. Se dopo 7 giorni non sei convinto, nessun problema.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL PREVIEW -->
+        <section class="bg-[#0a0a0a]">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h2 class="section-title">Cosa Dicono i <span class="text-[#00ff41]">Clienti</span></h2>
+                <p class="section-subtitle">Risultati reali, verificabili nel Discord ogni giorno.</p>
+
+                <!-- Live Feed -->
+                <div class="card max-w-2xl mx-auto mb-8">
+                    <h4 class="text-sm font-mono text-[#00ff41] mb-4 flex items-center justify-center gap-2">
+                        <span class="w-2 h-2 bg-[#00ff41] rounded-full animate-pulse"></span>
+                        RISULTATI LIVE DAL DISCORD
+                    </h4>
+                    <div class="space-y-3 text-left font-mono text-sm">
+                        <div class="text-gray-400 terminal-line">Giovanni ha ricevuto payout <span class="text-[#00ff41] font-bold">€2.340</span> — 2h fa</div>
+                        <div class="text-gray-400 terminal-line">Marco ha passato Phase 1 <span class="text-[#00ff41] font-bold">100K</span> — 5h fa</div>
+                        <div class="text-gray-400 terminal-line">Sara ha ricevuto payout <span class="text-[#00ff41] font-bold">€1.890</span> — 8h fa</div>
+                        <div class="text-gray-400 terminal-line">Luca ha passato Phase 2 <span class="text-[#00ff41] font-bold">50K</span> — 12h fa</div>
+                    </div>
+                </div>
+
+                <a href="#testimonial" class="btn-secondary" data-page="testimonial">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                    Guarda le Testimonianze
+                </a>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00ff41]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+                <h2 class="text-3xl md:text-5xl font-bold mb-6">
+                    Pronto a <span class="text-[#00ff41] glow-text">Iniziare?</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    Unisciti a 300+ trader che già usano il sistema. 7 giorni gratis.
+                </p>
+                <a href="#contatti" class="btn-primary text-lg px-12 py-5 mb-6 pulse-glow" data-page="contatti">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                    Accedi Gratis alla Community
+                </a>
+                <p class="text-gray-600 text-sm">
+                    Oppure <a href="#software" class="text-[#00ff41] hover:underline" data-page="software">guarda come funziona il sistema →</a>
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm text-gray-500">
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                        Nessuna carta richiesta
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                        Accesso immediato
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i>
+                        Cancella quando vuoi
+                    </span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: CHI SIAMO                            -->
+    <!-- ========================================== -->
+    <div id="chi-siamo" class="page">
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h1 class="section-title">Il Team Dietro <span class="text-[#00ff41]">Hedge Fund</span></h1>
+                    <p class="section-subtitle">Trader professionisti che ci mettono la faccia. Live ogni giorno, risultati condivisi, zero segreti.</p>
+                </div>
+
+                <!-- Approach -->
+                <div class="card max-w-3xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-4 text-[#00ff41]">Trasparenza Totale</h3>
+                    <p class="text-gray-400 mb-4">
+                        A differenza di altri che parlano in codice e nascondono tutto, noi mostriamo tutto. Live trading ogni mattina e pomeriggio. Risultati pubblici nel Discord. Se il sistema non funziona, 300+ persone te lo dicono subito.
+                    </p>
+                    <p class="text-white font-semibold">Non ti chiediamo di fidarti. Ti chiediamo di verificare.</p>
+                </div>
+
+                <!-- Team Grid -->
+                <div class="grid md:grid-cols-5 gap-6 mb-16">
+                    <!-- Manuel -->
+                    <div class="card text-center">
+                        <div class="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-gray-700">
+                            <span class="text-2xl font-bold text-gray-600">[FOTO]</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Manuel</h3>
+                        <p class="text-[#00ff41] text-sm font-medium">Trading Oro</p>
+                        <p class="text-gray-500 text-xs mt-2">Co-founder, Live & Coaching</p>
+                    </div>
+
+                    <!-- Alessio -->
+                    <div class="card text-center">
+                        <div class="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-gray-700">
+                            <span class="text-2xl font-bold text-gray-600">[FOTO]</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Alessio</h3>
+                        <p class="text-[#00ff41] text-sm font-medium">Trading & Software</p>
+                        <p class="text-gray-500 text-xs mt-2">Co-founder, Sviluppo</p>
+                    </div>
+
+                    <!-- Christian -->
+                    <div class="card text-center">
+                        <div class="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-gray-700">
+                            <span class="text-2xl font-bold text-gray-600">[FOTO]</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Christian</h3>
+                        <p class="text-[#00ff41] text-sm font-medium">Trading Algoritmico</p>
+                        <p class="text-gray-500 text-xs mt-2">Sviluppo Software</p>
+                    </div>
+
+                    <!-- Fulvio -->
+                    <div class="card text-center">
+                        <div class="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-gray-700">
+                            <span class="text-2xl font-bold text-gray-600">[FOTO]</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Fulvio</h3>
+                        <p class="text-[#00ff41] text-sm font-medium">Trading EUR/USD</p>
+                        <p class="text-gray-500 text-xs mt-2">Live & Outlook Settimanale</p>
+                    </div>
+
+                    <!-- Andrea -->
+                    <div class="card text-center">
+                        <div class="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-gray-700">
+                            <span class="text-2xl font-bold text-gray-600">[FOTO]</span>
+                        </div>
+                        <h3 class="font-bold text-lg">Andrea</h3>
+                        <p class="text-[#00ff41] text-sm font-medium">Volumetrica</p>
+                        <p class="text-gray-500 text-xs mt-2">Formazione Avanzata</p>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-16">
+                    <div class="card text-center">
+                        <div class="stat-value text-2xl">300+</div>
+                        <div class="text-gray-500 text-sm">Clienti Attivi</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-2xl">7K+</div>
+                        <div class="text-gray-500 text-sm">Telegram</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-2xl">5</div>
+                        <div class="text-gray-500 text-sm">White Label</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-2xl">24</div>
+                        <div class="text-gray-500 text-sm">Mesi Backtest</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-2xl font-mono text-lg mt-1">DAILY</div>
+                        <div class="text-gray-500 text-sm">Live Trading</div>
+                    </div>
+                </div>
+
+                <!-- Philosophy -->
+                <div class="card max-w-3xl mx-auto">
+                    <h3 class="text-xl font-bold mb-4 text-[#00ff41]">La Nostra Filosofia</h3>
+                    <blockquote class="text-lg mb-4">
+                        "Non ti dico 'compra subito'. Ti dico: prenditi il tuo tempo, valuta, poi decidi. Niente marketing aggressivo."
+                    </blockquote>
+                    <blockquote class="mb-4">
+                        "Quando un sistema funziona e diventa egoista, mi gira il cazzo. Lavora bene, fagli pagare il giusto, seguili bene. Un cliente contento oggi è un cliente per domani."
+                    </blockquote>
+                    <p class="text-gray-500">
+                        Niente "compra subito o domani costa €5.000". Ti spieghiamo tutto, ti facciamo vedere il sistema, poi decidi tu con calma.
+                    </p>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center mt-16">
+                    <h3 class="text-2xl font-bold mb-4">Vuoi Conoscerci Meglio?</h3>
+                    <p class="text-gray-400 mb-6">Entra nel canale Telegram gratuito. Guarda le live. Parla con i membri.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#" class="btn-primary">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            Unisciti al Telegram
+                        </a>
+                        <a href="#" class="btn-secondary">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            Entra nel Discord
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: SOFTWARE                             -->
+    <!-- ========================================== -->
+    <div id="software" class="page">
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h1 class="section-title">Software di <span class="text-[#00ff41]">Trading Matematico</span></h1>
+                    <p class="section-subtitle">Esecuzione al millisecondo, account illimitati, calcolatore integrato. Tutto quello che serve per applicare il sistema.</p>
+                </div>
+
+                <!-- Come Funziona -->
+                <div class="card max-w-4xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-8 text-center">Come Funziona il Sistema</h3>
+                    <p class="text-gray-400 text-center mb-8">Il sistema sfrutta l'arbitraggio tra broker e prop firm:</p>
+
+                    <div class="grid md:grid-cols-3 gap-8 text-center mb-8">
+                        <div>
+                            <div class="w-16 h-16 bg-[#00ff41]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00ff41]/30">
+                                <span class="text-[#00ff41] font-bold text-xl">1</span>
+                            </div>
+                            <p class="text-gray-400">Apri un'operazione sulla <strong class="text-white">prop firm</strong><br>(es. BUY su oro)</p>
+                        </div>
+                        <div>
+                            <div class="w-16 h-16 bg-[#00ff41]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00ff41]/30">
+                                <span class="text-[#00ff41] font-bold text-xl">2</span>
+                            </div>
+                            <p class="text-gray-400">Il software apre <strong class="text-white">l'operazione opposta</strong> sul broker<br>(SELL su oro)</p>
+                        </div>
+                        <div>
+                            <div class="w-16 h-16 bg-[#00ff41]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00ff41]/30">
+                                <span class="text-[#00ff41] font-bold text-xl">3</span>
+                            </div>
+                            <p class="text-gray-400">Qualunque direzione prenda il mercato,<br><strong class="text-white">una delle due guadagna</strong></p>
+                        </div>
+                    </div>
+
+                    <p class="text-center text-gray-500">Il calcolatore ti dice esattamente quanto depositare sul broker per coprire qualsiasi scenario.</p>
+                </div>
+
+                <!-- Due Scenari -->
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+                    <div class="card border-[#00ff41]/30">
+                        <h4 class="font-bold text-[#00ff41] mb-3">Scenario A - Passi la challenge</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>✓ Guadagni il payout dalla prop firm</li>
+                            <li>✓ Recuperi la piccola perdita sul broker</li>
+                            <li class="text-white font-semibold">→ Risultato: Profitto netto</li>
+                        </ul>
+                    </div>
+                    <div class="card border-orange-500/30">
+                        <h4 class="font-bold text-orange-400 mb-3">Scenario B - Bruci la challenge</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>✗ Perdi la fee della challenge</li>
+                            <li>✓ Guadagni sul broker (recovery amount)</li>
+                            <li class="text-white font-semibold">→ Risultato: Recuperi la perdita</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <blockquote class="max-w-3xl mx-auto text-center mb-16">
+                    "In qualsiasi situazione dove ti puoi trovare, sai sempre come ti devi comportare per avere quel vantaggio matematico."
+                </blockquote>
+
+                <!-- Features -->
+                <h3 class="text-2xl font-bold text-center mb-8">Caratteristiche del Software</h3>
+                <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16">
+                    <div class="card">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 bg-[#00ff41]/10 rounded-lg flex items-center justify-center">
+                                <i data-lucide="zap" class="w-6 h-6 text-[#00ff41]"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">Esecuzione al Millisecondo</h4>
+                        </div>
+                        <p class="text-gray-500">Quando apri operazioni in contemporanea tra prop e broker, la velocità fa la differenza. Un ritardo di secondi può mangiarti i profitti.</p>
+                        <blockquote class="mt-3 text-sm">"Ci vuole un software perché la precisione al millisecondo è impossibile da replicare manualmente."</blockquote>
+                    </div>
+
+                    <div class="card">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 bg-[#00ff41]/10 rounded-lg flex items-center justify-center">
+                                <i data-lucide="infinity" class="w-6 h-6 text-[#00ff41]"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">Account Illimitati</h4>
+                        </div>
+                        <p class="text-gray-500">Altri sistemi ti vendono "una licenza per account". Con noi puoi gestire 10, 20, 50 challenge contemporaneamente.</p>
+                        <blockquote class="mt-3 text-sm">"Il software che ti do non ha limiti. Puoi prendere quanti account vuoi, non c'è un cap."</blockquote>
+                    </div>
+
+                    <div class="card">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 bg-[#00ff41]/10 rounded-lg flex items-center justify-center">
+                                <i data-lucide="settings" class="w-6 h-6 text-[#00ff41]"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">Semi-Automatico</h4>
+                        </div>
+                        <p class="text-gray-500">Le operazioni le apri tu con un click (BUY o SELL). Il software gestisce l'esecuzione precisa e la sincronizzazione.</p>
+                        <blockquote class="mt-3 text-sm">"La mattina prima di andare a lavorare clicchi buy o sell, poi durante la giornata fai quello che vuoi."</blockquote>
+                    </div>
+
+                    <div class="card">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 bg-[#00ff41]/10 rounded-lg flex items-center justify-center">
+                                <i data-lucide="refresh-cw" class="w-6 h-6 text-[#00ff41]"></i>
+                            </div>
+                            <h4 class="font-bold text-lg">Aggiornamenti Continui</h4>
+                        </div>
+                        <p class="text-gray-500">Il software è costantemente aggiornato. Nuove prop firm supportate, ottimizzazioni, bug fix - tutto incluso nell'abbonamento.</p>
+                    </div>
+                </div>
+
+                <!-- Calcolatore Excel -->
+                <div class="card max-w-4xl mx-auto mb-16">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 bg-[#00ff41]/10 rounded-lg flex items-center justify-center">
+                            <i data-lucide="calculator" class="w-7 h-7 text-[#00ff41]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Calcolatore Excel - Recovery Amount</h3>
+                            <p class="text-gray-500">File Excel proprietario che ti dice esattamente cosa fare</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold mb-3">Cosa Ti Dice:</h4>
+                            <ul class="space-y-2 text-sm text-gray-400">
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Quanto depositare sul broker</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> I calcoli da inserire nel software</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Previsioni in tempo reale</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Cosa succede se passi o bruci</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3">Come Si Usa:</h4>
+                            <ol class="space-y-2 text-sm text-gray-400 list-decimal list-inside">
+                                <li>Inserisci le metriche della prop firm</li>
+                                <li>Inserisci quanto vuoi guadagnare</li>
+                                <li>Il calcolatore ti dice il recovery amount</li>
+                                <li>Copi i calcoli nel software</li>
+                            </ol>
+                            <p class="text-[#00ff41] font-semibold mt-4">Tempo totale: 5 minuti</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prop Firm -->
+                <div class="text-center mb-16">
+                    <h3 class="text-2xl font-bold mb-4">18+ Prop Firm Supportate</h3>
+                    <p class="text-gray-500 mb-6 max-w-2xl mx-auto">Abbiamo testato personalmente ogni prop firm. Per ognuna c'è una scheda dettagliata nel Discord con challenge consigliata, target, regole e feedback della community.</p>
+
+                    <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-400 mb-6">
+                        <span class="px-3 py-1 bg-gray-900 rounded">FTMO</span>
+                        <span class="px-3 py-1 bg-gray-900 rounded">The Funded Trader</span>
+                        <span class="px-3 py-1 bg-gray-900 rounded">The5ers</span>
+                        <span class="px-3 py-1 bg-gray-900 rounded">True Forex Funds</span>
+                        <span class="px-3 py-1 bg-gray-900 rounded">MyForexFunds</span>
+                        <span class="px-3 py-1 bg-gray-900 rounded">+ altre 13</span>
+                    </div>
+
+                    <blockquote class="max-w-2xl mx-auto">"Se una prop firm domani dovesse smettere di essere valida, scriviamo subito 'Non più utilizzabile' così sai come comportarti."</blockquote>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold mb-4">Vuoi Vedere il Software in Azione?</h3>
+                    <p class="text-gray-400 mb-6">Nelle live trading mostriamo il software ogni giorno. Guarda come funziona prima di decidere.</p>
+                    <a href="#contatti" class="btn-primary" data-page="contatti">
+                        <i data-lucide="play-circle" class="w-5 h-5"></i>
+                        Guarda una Live
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: CORSI                                -->
+    <!-- ========================================== -->
+    <div id="corsi" class="page">
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h1 class="section-title">Video <span class="text-[#00ff41]">Academy</span> Completa</h1>
+                    <p class="section-subtitle">Da zero al primo payout. Formazione strutturata, coach privato, live quotidiane.</p>
+                </div>
+
+                <!-- Intro -->
+                <div class="card max-w-3xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-4 text-[#00ff41]">Un Ecosistema Completo</h3>
+                    <p class="text-gray-400 mb-4">
+                        Non è solo un corso video. È un sistema di formazione completo che ti porta dal "non so niente di trading" al "ho fatto il mio primo payout".
+                    </p>
+                    <blockquote>
+                        "Noi abbiamo creato un ecosistema che funziona in automatico. Chiunque entra ha già tutto pronto che lo porta da zero al risultato."
+                    </blockquote>
+                </div>
+
+                <!-- Moduli -->
+                <h3 class="text-2xl font-bold text-center mb-8">Contenuti del Corso</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+                    <div class="card">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">MODULO 1</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Fondamenti</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Cos'è il trading matematico</li>
+                            <li>• Come funziona l'arbitraggio</li>
+                            <li>• Differenza dal trading tradizionale</li>
+                            <li>• Setup iniziale (demo)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">MODULO 2</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Il Software</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Installazione e configurazione</li>
+                            <li>• Come usare il calcolatore Excel</li>
+                            <li>• Inserimento calcoli nel software</li>
+                            <li>• Esecuzione operazioni (BUY/SELL)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">MODULO 3</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Le Prop Firm</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Come scegliere la prop giusta</li>
+                            <li>• Regole da rispettare per ogni challenge</li>
+                            <li>• Phase 1, Phase 2, Funded: differenze</li>
+                            <li>• Come gestire i payout</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">MODULO 4</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Operatività</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Routine giornaliera (5 minuti)</li>
+                            <li>• Quando aprire/chiudere operazioni</li>
+                            <li>• Gestione TP e SL</li>
+                            <li>• Cosa fare in caso di problemi</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">MODULO 5</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Scaling</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Da 1 account a multipli</li>
+                            <li>• Gestione capitale tra broker e prop</li>
+                            <li>• Strategie di scaling progressivo</li>
+                            <li>• White label (per chi vuole)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card card-highlighted">
+                        <span class="text-[#00ff41] font-mono text-sm font-bold">BONUS</span>
+                        <h4 class="font-bold text-lg mt-2 mb-3">Coach Privato</h4>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• Ti segue 1:1 nei primi passi</li>
+                            <li>• Controlla i tuoi setup</li>
+                            <li>• Risponde alle domande</li>
+                            <li>• Ti corregge se sbagli</li>
+                        </ul>
+                        <p class="text-xs text-gray-600 mt-3">Incluso in Pro (2 call/mese) ed Elite (illimitate)</p>
+                    </div>
+                </div>
+
+                <!-- Coach Privato -->
+                <div class="card max-w-3xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-4 text-[#00ff41]">Non Sei Mai Solo</h3>
+                    <p class="text-gray-400 mb-4">
+                        Con i pacchetti Pro ed Elite hai un coach dedicato che ti segue 1:1, controlla i tuoi setup prima che operi, risponde alle domande in modo personalizzato e ti corregge se stai facendo errori.
+                    </p>
+                    <blockquote>
+                        "Il coach privato è quello che ti segue quando sei iscritto. Fai i primi passi insieme a lui, in modo che non ti puoi perdere."
+                    </blockquote>
+                </div>
+
+                <!-- Live Trading -->
+                <div class="card max-w-4xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-6 text-center">Formazione in Tempo Reale - Live Trading</h3>
+                    <p class="text-gray-400 text-center mb-6">Oltre ai video preregistrati, facciamo live ogni giorno:</p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800">
+                                    <th class="text-left py-3 text-gray-500">Orario</th>
+                                    <th class="text-left py-3 text-gray-500">Contenuto</th>
+                                    <th class="text-left py-3 text-gray-500">Chi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-400">
+                                <tr class="border-b border-gray-800/50">
+                                    <td class="py-3 font-mono text-[#00ff41]">9:00</td>
+                                    <td class="py-3">Analisi mercato + Live trading</td>
+                                    <td class="py-3">Manuel</td>
+                                </tr>
+                                <tr class="border-b border-gray-800/50">
+                                    <td class="py-3 font-mono text-[#00ff41]">15:00</td>
+                                    <td class="py-3">Sessione New York</td>
+                                    <td class="py-3">Fulvio</td>
+                                </tr>
+                                <tr class="border-b border-gray-800/50">
+                                    <td class="py-3 font-mono text-[#00ff41]">18:30</td>
+                                    <td class="py-3">Q&A e Formazione (Pro/Elite)</td>
+                                    <td class="py-3">Team</td>
+                                </tr>
+                                <tr class="border-b border-gray-800/50">
+                                    <td class="py-3 font-mono text-[#00ff41]">Settimanale</td>
+                                    <td class="py-3">Outlook mercato</td>
+                                    <td class="py-3">Fulvio</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 font-mono text-[#00ff41]">Periodiche</td>
+                                    <td class="py-3">Volumetrica avanzata</td>
+                                    <td class="py-3">Andrea</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <blockquote class="mt-6 text-center">
+                        "Facciamo live trading la mattina, live il pomeriggio. Se hai bisogno di un contatto diretto, vieni in live e ti rispondiamo."
+                    </blockquote>
+                </div>
+
+                <!-- Timeline -->
+                <div class="card max-w-3xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-6 text-center">Quanto Tempo Serve?</h3>
+
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div class="text-center flex-1">
+                            <div class="text-[#00ff41] font-mono font-bold text-lg">WEEK 1</div>
+                            <div class="text-gray-500 text-sm">Studio corso</div>
+                        </div>
+                        <div class="text-gray-600 text-2xl">→</div>
+                        <div class="text-center flex-1">
+                            <div class="text-[#00ff41] font-mono font-bold text-lg">WEEK 2</div>
+                            <div class="text-gray-500 text-sm">Demo</div>
+                        </div>
+                        <div class="text-gray-600 text-2xl">→</div>
+                        <div class="text-center flex-1">
+                            <div class="text-[#00ff41] font-mono font-bold text-lg">WEEK 3</div>
+                            <div class="text-gray-500 text-sm">Prime operazioni</div>
+                        </div>
+                        <div class="text-gray-600 text-2xl">→</div>
+                        <div class="text-center flex-1">
+                            <div class="text-[#00ff41] font-mono font-bold text-lg">~20 GG</div>
+                            <div class="text-gray-500 text-sm">Operativo</div>
+                        </div>
+                    </div>
+
+                    <blockquote class="mt-6 text-center">
+                        "Andando piano, tra studiare il corso, venire a qualche live, fare due tre giri, in venti giorni sei operativo."
+                    </blockquote>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold mb-4">Pronto a Iniziare il Percorso?</h3>
+                    <p class="text-gray-400 mb-6">Scegli il pacchetto giusto per te. Tutti includono accesso alla Video Academy.</p>
+                    <a href="#home" class="btn-primary" data-page="home">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                        Vedi i Pacchetti
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: TESTIMONIAL                          -->
+    <!-- ========================================== -->
+    <div id="testimonial" class="page">
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h1 class="section-title">Cosa Dicono i <span class="text-[#00ff41]">Clienti</span></h1>
+                    <p class="section-subtitle">Risultati reali, verificabili nel Discord. Non attori, non script - persone vere.</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+                    <div class="card text-center">
+                        <div class="stat-value text-3xl">€1.2M+</div>
+                        <div class="text-gray-500 text-sm">Profitti Generati</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-3xl">300+</div>
+                        <div class="text-gray-500 text-sm">Clienti Attivi</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-3xl">24</div>
+                        <div class="text-gray-500 text-sm">Mesi Backtest</div>
+                    </div>
+                    <div class="card text-center">
+                        <div class="stat-value text-3xl">99.7%</div>
+                        <div class="text-gray-500 text-sm">Uptime Sistema</div>
+                    </div>
+                </div>
+
+                <!-- Video Testimonial Placeholders -->
+                <h3 class="text-2xl font-bold text-center mb-8">Video Testimonial Reali</h3>
+                <p class="text-gray-500 text-center mb-8 max-w-xl mx-auto">Non attori. Non script. Clienti veri che condividono la loro esperienza.</p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-16">
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+                </div>
+
+                <!-- Seconda riga video -->
+                <div class="grid md:grid-cols-3 gap-6 mb-16">
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center border border-gray-800">
+                            <div class="text-center">
+                                <i data-lucide="play-circle" class="w-16 h-16 text-gray-700 mx-auto mb-2"></i>
+                                <span class="text-gray-600 text-sm">[VIDEO PLACEHOLDER]</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm italic">"[Citazione cliente da inserire]"</p>
+                        <p class="text-[#00ff41] font-semibold mt-2">[Nome Cliente] — [Professione]</p>
+                    </div>
+                </div>
+
+                <!-- Live Results Feed -->
+                <div class="card max-w-2xl mx-auto mb-16">
+                    <h4 class="text-sm font-mono text-[#00ff41] mb-4 flex items-center justify-center gap-2">
+                        <span class="w-2 h-2 bg-[#00ff41] rounded-full animate-pulse"></span>
+                        RISULTATI DAL DISCORD - LIVE
+                    </h4>
+                    <div class="space-y-3 text-left font-mono text-sm">
+                        <div class="text-gray-400 terminal-line">Giovanni ha ricevuto payout <span class="text-[#00ff41] font-bold">€2.340</span> — 2h fa</div>
+                        <div class="text-gray-400 terminal-line">Marco ha passato Phase 1 <span class="text-[#00ff41] font-bold">100K</span> — 5h fa</div>
+                        <div class="text-gray-400 terminal-line">Sara ha ricevuto payout <span class="text-[#00ff41] font-bold">€1.890</span> — 8h fa</div>
+                        <div class="text-gray-400 terminal-line">Luca ha passato Phase 2 <span class="text-[#00ff41] font-bold">50K</span> — 12h fa</div>
+                        <div class="text-gray-400 terminal-line">Andrea ha ricevuto payout <span class="text-[#00ff41] font-bold">€3.120</span> — 1d fa</div>
+                    </div>
+                </div>
+
+                <!-- Community Quote -->
+                <div class="card max-w-3xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-4 text-[#00ff41]">Una Community Che Si Aiuta</h3>
+                    <blockquote class="mb-4">
+                        "Tu hai in primis una community. Una community significa che se il sistema non funziona, se non è semplice, se non è replicabile, la community non sta bene."
+                    </blockquote>
+                    <blockquote>
+                        "Vai su risultati nel Discord. Sono tutti i clienti che parlano, non dobbiamo parlare noi. Con nome e cognome, payout, tutto."
+                    </blockquote>
+                </div>
+
+                <!-- CTA -->
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold mb-4">Vuoi Vedere con i Tuoi Occhi?</h3>
+                    <p class="text-gray-400 mb-6">Entra nel Telegram gratuito. Leggi i messaggi. Guarda le prove. Poi decidi.</p>
+                    <a href="#contatti" class="btn-primary" data-page="contatti">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        Unisciti alla Community
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- PAGE: CONTATTI                             -->
+    <!-- ========================================== -->
+    <div id="contatti" class="page">
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h1 class="section-title"><span class="text-[#00ff41]">Contattaci</span></h1>
+                    <p class="section-subtitle">Community attiva, supporto rapido, risposte concrete.</p>
+                </div>
+
+                <!-- Main Channels -->
+                <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-16">
+                    <!-- Discord -->
+                    <div class="card">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-14 h-14 bg-[#5865F2]/20 rounded-lg flex items-center justify-center">
+                                <i data-lucide="message-circle" class="w-7 h-7 text-[#5865F2]"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Discord</h3>
+                                <p class="text-gray-500 text-sm">Per membri attivi</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-400 space-y-2 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Supporto tecnico via ticket</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Canale risultati</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Live trading quotidiane</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Coach privato (Pro/Elite)</li>
+                        </ul>
+                        <p class="text-xs text-gray-600 mb-4">Tempo risposta: < 2h (Pro/Elite) | < 24h (Starter)</p>
+                        <a href="#" class="btn-secondary w-full">Accedi al Discord</a>
+                    </div>
+
+                    <!-- Telegram -->
+                    <div class="card card-highlighted">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-14 h-14 bg-[#0088cc]/20 rounded-lg flex items-center justify-center">
+                                <i data-lucide="send" class="w-7 h-7 text-[#0088cc]"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Telegram</h3>
+                                <p class="text-gray-500 text-sm">Pubblico e gratuito</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-400 space-y-2 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> 7.000+ membri attivi</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Aggiornamenti e news</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Preview delle live</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#00ff41]"></i> Discussioni generali</li>
+                        </ul>
+                        <p class="text-xs text-gray-600 mb-4">Accesso immediato, nessun costo</p>
+                        <a href="#" class="btn-primary w-full">Unisciti al Telegram</a>
+                    </div>
+                </div>
+
+                <!-- Orari Live -->
+                <div class="card max-w-2xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-6 text-center">Orari Live Trading</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                            <span class="text-gray-400">Lun-Ven 9:00</span>
+                            <span class="font-medium">Live Trading Mattina</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                            <span class="text-gray-400">Lun-Ven 15:00</span>
+                            <span class="font-medium">Sessione New York</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                            <span class="text-gray-400">Martedì 18:30</span>
+                            <span class="font-medium">Formazione (Pro/Elite)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Settimanale</span>
+                            <span class="font-medium">Outlook Mercato</span>
+                        </div>
+                    </div>
+                    <blockquote class="mt-6 text-center">
+                        "Hai bisogno di un contatto ancora più diretto? Vieni in live con noi e ti rispondiamo personalmente."
+                    </blockquote>
+                </div>
+
+                <!-- FAQ Contatti -->
+                <div class="max-w-2xl mx-auto mb-16">
+                    <h3 class="text-xl font-bold mb-6 text-center">Domande Frequenti</h3>
+
+                    <div class="space-y-4">
+                        <div class="card">
+                            <h4 class="font-semibold mb-2">Come posso provare prima di comprare?</h4>
+                            <p class="text-gray-500 text-sm">Entra nel Telegram gratuito. Guarda le live. Parla con i membri. 7 giorni per valutare, nessun impegno.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4 class="font-semibold mb-2">Quanto tempo per una risposta?</h4>
+                            <p class="text-gray-500 text-sm">Telegram pubblico: la community risponde subito. Discord ticket: < 24h (Starter), < 2h (Pro/Elite). Live: risposta immediata.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4 class="font-semibold mb-2">Posso parlare con qualcuno del team?</h4>
+                            <p class="text-gray-500 text-sm">Sì, durante le live puoi fare domande dirette. Per call private, il coach è disponibile per Pro/Elite.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="text-center mb-16">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-400">Seguici anche su</h3>
+                    <div class="flex justify-center gap-4">
+                        <a href="#" class="card p-4 hover:border-[#00ff41] transition-all">
+                            <i data-lucide="instagram" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="card p-4 hover:border-[#00ff41] transition-all">
+                            <i data-lucide="youtube" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Final Message -->
+                <div class="text-center">
+                    <blockquote class="text-xl max-w-2xl mx-auto">
+                        "Non ti chiediamo di fidarti. Ti chiediamo di verificare."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- FOOTER                                     -->
+    <!-- ========================================== -->
+    <footer class="bg-black border-t border-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo -->
+                <div>
+                    <a href="#home" class="text-2xl font-bold font-mono text-white" data-page="home">
+                        HEDGE<span class="text-[#00ff41]">FUND</span>
+                    </a>
+                    <p class="text-gray-600 text-sm mt-4">Trading matematico per risultati verificabili. Community di trader che condividono risultati ogni giorno.</p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Pagine</h4>
+                    <ul class="space-y-2 text-gray-500 text-sm">
+                        <li><a href="#home" class="hover:text-[#00ff41] transition" data-page="home">Home</a></li>
+                        <li><a href="#chi-siamo" class="hover:text-[#00ff41] transition" data-page="chi-siamo">Chi Siamo</a></li>
+                        <li><a href="#software" class="hover:text-[#00ff41] transition" data-page="software">Software</a></li>
+                        <li><a href="#corsi" class="hover:text-[#00ff41] transition" data-page="corsi">Corsi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-semibold mb-4">Legale</h4>
+                    <ul class="space-y-2 text-gray-500 text-sm">
+                        <li><a href="#" class="hover:text-[#00ff41] transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition">Termini di Servizio</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition">Cookie Policy</a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition">Disclaimer Rischi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Community -->
+                <div>
+                    <h4 class="font-semibold mb-4">Community</h4>
+                    <ul class="space-y-2 text-gray-500 text-sm">
+                        <li><a href="#" class="hover:text-[#00ff41] transition flex items-center gap-2">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> Discord
+                        </a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition flex items-center gap-2">
+                            <i data-lucide="send" class="w-4 h-4"></i> Telegram
+                        </a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition flex items-center gap-2">
+                            <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
+                        </a></li>
+                        <li><a href="#" class="hover:text-[#00ff41] transition flex items-center gap-2">
+                            <i data-lucide="youtube" class="w-4 h-4"></i> YouTube
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="border-t border-gray-900 pt-8 text-center">
+                <p class="text-gray-600 text-sm mb-2">© 2025 Hedge Fund. Tutti i diritti riservati.</p>
+                <p class="text-gray-700 text-xs max-w-3xl mx-auto">
+                    <strong>Disclaimer:</strong> Il trading comporta rischi significativi. I risultati passati non garantiscono risultati futuri.
+                    Investi solo capitale che puoi permetterti di perdere. Questo non è un consiglio finanziario.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS                                    -->
+    <!-- ========================================== -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Page Navigation (SPA-like)
+        function navigateToPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+            // Show target page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll(`[data-page="${pageId}"]`).forEach(l => l.classList.add('active'));
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Close mobile menu
+            document.getElementById('mobile-menu')?.classList.add('hidden');
+        }
+
+        // Handle all navigation clicks
+        document.querySelectorAll('[data-page]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                navigateToPage(pageId);
+            });
+        });
+
+        // Handle anchor links within pages (like #pricing-section)
+        document.querySelectorAll('a[href^="#"]:not([data-page])').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.length > 1) {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenu && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
